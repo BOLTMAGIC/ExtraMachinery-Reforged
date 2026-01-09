@@ -418,12 +418,8 @@ public class EntityManaSparkPattern extends SparkBaseEntity implements ManaSpark
     }
 
     public boolean areIncomingTransfersDone() {
-        if (this.getAttachedManaReceiver() instanceof ManaPool) {
-            return false;
-        } else {
-            SparkAttachable attachable = this.getAttachedTile();
-            return attachable != null && attachable.areIncomingTranfersDone();
-        }
+        SparkAttachable attachable = this.getAttachedTile();
+        return attachable != null && attachable.areIncomingTranfersDone();
     }
 
     static {

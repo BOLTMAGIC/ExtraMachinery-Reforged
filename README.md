@@ -1,7 +1,7 @@
 <div align="center" width="400" height="400">
 <img src="src/main/resources/logo.png" alt="logo" width="200"/>
 
-## Botanical Machinery Extra Reforged
+## Botanical Machinery Extra Reforked
 
 </div>
 

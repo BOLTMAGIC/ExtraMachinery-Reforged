@@ -12,6 +12,7 @@
     "botanicalextramachinery:base_daisy",
     "botanicalextramachinery:base_industrial_agglomeration_factory",
     "botanicalextramachinery:base_mana_pool",
+    "botanicalextramachinery:base_mana_infuser",
     "botanicalextramachinery:base_orechid",
     "botanicalextramachinery:base_runic_altar",
     "botanicalextramachinery:crimson_dragonstone_block",
@@ -31,6 +32,7 @@
     "botanicalextramachinery:ultimate_daisy",
     "botanicalextramachinery:ultimate_industrial_agglomeration_factory",
     "botanicalextramachinery:ultimate_mana_pool",
+    "botanicalextramachinery:ultimate_mana_infuser",
     "botanicalextramachinery:ultimate_orechid",
     "botanicalextramachinery:ultimate_runic_altar",
     "botanicalextramachinery:upgraded_alfheim_market",
@@ -38,7 +40,9 @@
     "botanicalextramachinery:upgraded_daisy",
     "botanicalextramachinery:upgraded_industrial_agglomeration_factory",
     "botanicalextramachinery:upgraded_mana_pool",
+    "botanicalextramachinery:upgraded_mana_infuser",
     "botanicalextramachinery:upgraded_orechid",
-    "botanicalextramachinery:upgraded_runic_altar"
+    "botanicalextramachinery:upgraded_runic_altar",
+    "botanicalextramachinery:advanced_mana_infuser"
   ]
 }

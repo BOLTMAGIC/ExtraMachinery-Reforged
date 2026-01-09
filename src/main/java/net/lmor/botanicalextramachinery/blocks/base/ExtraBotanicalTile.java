@@ -171,7 +171,7 @@ public abstract class ExtraBotanicalTile extends BlockEntityBase implements Mana
     }
 
     public boolean areIncomingTranfersDone() {
-        return !this.actAsMana();
+        return !this.actAsMana() || this.isFull();
     }
 
     public boolean isFull() {
