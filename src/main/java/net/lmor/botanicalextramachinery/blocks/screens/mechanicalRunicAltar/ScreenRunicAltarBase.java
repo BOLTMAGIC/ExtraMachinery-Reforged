@@ -48,7 +48,7 @@ public class ScreenRunicAltarBase extends ExtraScreenBase<ContainerRunicAltarBas
 
         slotInfo.setCoord(slots);
         slotInfo.setTranslatableText(new String[] {
-                "botanicalextramachinery.tooltip.screen.upgrade_slot"
+                "botanicalextramachinery.tooltip.screen.livingrock_slot"
         });
     }
 
