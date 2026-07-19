@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.1.2.9.9 — 2026-07-15
+### Fixed
+- Fix Base Runic Altar Livingrock Slot tooltip (thx to MiniMaxi)
+
 ## v0.1.2.9.8 — 2026-06-17
 ### Fixed
 - Mana Infuser now correctly detects and uses MythicBotany's infuser RecipeType (optional) via robust reflection.
