@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.1.3.0.0 — 2026-08-15
+### Fixed
+- Greenhouse not outputting mana
+
 ## v0.1.2.9.9 — 2026-07-15
 ### Fixed
 - Fix Base Runic Altar Livingrock Slot tooltip (thx to MiniMaxi)

@@ -1,11 +1,9 @@
 package net.lmor.botanicalextramachinery.blocks.tiles;
 
-import appeng.api.config.Actionable;
 import appeng.api.networking.GridHelper;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IInWorldGridNodeHost;
 import appeng.api.networking.IManagedGridNode;
-import appeng.api.networking.security.IActionSource;
 import appeng.api.util.AECableType;
 import appeng.hooks.ticking.TickHandler;
 import appeng.me.helpers.BlockEntityNodeListener;
@@ -105,19 +103,19 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
 
         fuelInventory = BaseItemStackHandler.builder(FUEL_SIZE)
                 .validator(this::isCheckFuelSlot, Range.closedOpen(0, 7))
-                .validator((stack) -> { return upgrade_slot_add && isCheckFuelSlot(stack); }, Range.closedOpen(7, FUEL_SIZE))
+                .validator((stack) -> upgrade_slot_add && isCheckFuelSlot(stack), Range.closedOpen(7, FUEL_SIZE))
                 .contentsChanged((slot) -> {this.setChanged();this.setDispatchable();this.fuelChanged(slot);})
                 .build();
 
         upgradeInventory = BaseItemStackHandler.builder(UPGRADE_SIZE)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 0);}), 0)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 1);}), 1)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 2);}), 2)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 3);}), 3)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 4);}), 4)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 5);}), 5)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 6);}), 6)
-                .validator((itemStack -> { return isCheckUpgradeSlot(itemStack, 7);}), 7)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 0)), 0)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 1)), 1)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 2)), 2)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 3)), 3)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 4)), 4)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 5)), 5)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 6)), 6)
+                .validator((itemStack -> isCheckUpgradeSlot(itemStack, 7)), 7)
                 .defaultSlotLimit(1)
                 .contentsChanged((slot) -> {this.setChanged();this.setDispatchable();this.updateUpgradeSlot(slot);})
                 .build();
@@ -144,15 +142,9 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
                     this.slotLimit = 1;
                     dropLimitFlowers();
                 }
-                case 1 ->{
-                    upgrade_gen_mana = false;
-                }
-                case 2 -> {
-                    upgrade_slot_add = false;
-                }
-                case 3 -> {
-                    upgrade_cost_energy = false;
-                }
+                case 1 -> upgrade_gen_mana = false;
+                case 2 -> upgrade_slot_add = false;
+                case 3 -> upgrade_cost_energy = false;
                 case 4 -> {
                     upgrade_speed_craft = 0;
                     greenhouseSleep = Math.min(greenhouseSleep, LibXServerConfig.GreenhouseSettings.sleep);
@@ -210,9 +202,7 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
                             this.setCurrentMana(Math.min(this.getCurrentMana(), this.getMaxMana()));
                             stop = true;
                         }
-                        case 7 -> {
-                            upgrade_heat = true;
-                        }
+                        case 7 -> upgrade_heat = true;
                     }
                 }
 
@@ -299,7 +289,7 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
     }
 
     public void reloadFuelSlots(){
-        if (flowerSlots.size() == 0) {
+        if (flowerSlots.isEmpty()) {
             for (int slotFlower = 0; slotFlower < this.getFlowerInventory().getSlots(); slotFlower++){
                 flowerChanged(slotFlower);
             }
@@ -341,7 +331,17 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
             }
 
             greenhouseSleep--;
-            if (this.getMaxMana() == this.getCurrentMana() || this.getEnergyStored() < this.energyCost || fuelSlots.size() == 0) {
+
+            // Export available mana to AE2 grid even when not working
+            if (isModAppbot && exportManaME != null&& this.getMainNode() != null && this.getMainNode().getNode() != null && this.getMainNode().isOnline()){
+                // Export all available mana, not just excess
+                if (this.getCurrentMana() > 0) {
+                    int manaToExport = this.getCurrentMana();
+                    receiveMana(exportManaME.exportManaME(manaToExport, this.getMainNode().getNode().getGrid()));
+                }
+            }
+
+            if (this.getMaxMana() == this.getCurrentMana() || this.getEnergyStored() < this.energyCost || fuelSlots.isEmpty()) {
                 if (count_heat > 0 && greenhouseSleep <= 0){
                     count_heat--;
 
@@ -405,7 +405,8 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
 
                 for (int i = 0; i < 2; i++){
                     WispParticleData data = WispParticleData.wisp((float)Math.random() / 3.0F, red, green, blue, 2.0F);
-                    this.level.addParticle(data, (double)this.worldPosition.getX() + 0.3 + this.level.random.nextDouble() * 0.4, (double)this.worldPosition.getY() + 0.5 + this.level.random.nextDouble() * 0.25, (double)this.worldPosition.getZ() + 0.3 + this.level.random.nextDouble() * 0.4, 0.0, (double)(this.level.random.nextFloat() / 25.0F), 0.0);
+                    assert this.level != null;
+                    this.level.addParticle(data, (double)this.worldPosition.getX() + 0.3 + this.level.random.nextDouble() * 0.4, (double)this.worldPosition.getY() + 0.5 + this.level.random.nextDouble() * 0.25, (double)this.worldPosition.getZ() + 0.3 + this.level.random.nextDouble() * 0.4, 0.0, this.level.random.nextFloat() / 25.0F, 0.0);
                 }
             }
         }
@@ -441,12 +442,11 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
         int fuelAvailable = Math.min(fuel.getCount(), flower);
 
         long craftableByEnergy = this.getEnergyStored() / energyPerFuel;
-        long craftableByMana = manaPerFuel == 0 ? 0 : manaSpace / manaPerFuel;
 
         // Do not allow partial consumption that would overproduce mana.
         // Previously there was a special case that allowed crafting 1 unit even if manaPerFuel > manaSpace.
         // Remove that: require at least one full unit to fit into the remaining mana space.
-        long craftCount = craftableByMana;
+        long craftCount = manaSpace / manaPerFuel;
         craftCount = Math.min(craftCount, craftableByEnergy);
         craftCount = Math.min(craftCount, fuelAvailable);
 
@@ -461,9 +461,7 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
 
     @Override
     protected Predicate<Integer> getExtracts(Supplier<IItemHandlerModifiable> supplier) {
-        return (slot) -> {
-            return false;
-        };
+        return (slot) -> false;
     }
 
     @NotNull
@@ -673,10 +671,9 @@ public class BlockEntityGreenhouse extends ExtraBotanicalTile implements IEnergy
         return ModBlocks.greenhouse.asItem();
     }
 
-    private Object setChangedAtEndOfTick(Level level) {
+    private void setChangedAtEndOfTick(Level level) {
         this.setChanged();
         this.setChangedQueued = false;
-        return null;
     }
 
     @Nullable
