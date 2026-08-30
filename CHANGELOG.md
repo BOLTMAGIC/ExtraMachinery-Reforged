@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.1.3.0.1 — 2026-08-30
+### Fixed
+- Autocrafting: Fixed issue where input items were not fully consumed when ingredients were distributed across multiple input slots.
+- The recipe calculation now correctly sums ingredients cumulatively across all slots, and output is scaled by the actual amount extracted rather than the planned amount.
+
 ## v0.1.3.0.0 — 2026-08-15
 ### Fixed
 - Greenhouse not outputting mana
